@@ -25,7 +25,7 @@ body {
 	margin: 0.7em;
 	min-width: 26px;
 	min-height: 26px;
-	background: url('../buidl/layers.png');
+	background: url('../icons/layers.png');
 }
 
 #layer_settings ul li {
@@ -64,21 +64,21 @@ body {
 }
 
 .gym_team_1, .gym_team_mystic {
-	background: url('../buidl/mystic_bg.png');
+	background: url('../icons/mystic_bg.png');
     background-size: 200px;
     background-repeat: no-repeat;
 	background-position-y: -15px;
 }
 
 .gym_team_2, .gym_team_valor {
-	background: url('../buidl/valor_bg.png');
+	background: url('../icons/valor_bg.png');
     background-size: 200px;
     background-repeat: no-repeat;
 	background-position-y: -15px;
 }
 
 .gym_team_3, .gym_team_instinct {
-	background: url('../buidl/instinct_bg.png');
+	background: url('../icons/instinct_bg.png');
     background-size: 200px;
     background-repeat: no-repeat;
 	background-position-y: -15px;
@@ -95,7 +95,7 @@ body {
 }
 
 .pokemon_image {
-    background-image: url('../buidl/grass.png');
+    background-image: url('../icons/grass.png');
     background-position: bottom center;
     background-repeat: no-repeat;
 }

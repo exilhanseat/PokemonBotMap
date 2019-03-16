@@ -120,7 +120,6 @@ $(document).ready(function(){
     	
 	   	var gymsPromise = function(){ return $.getJSON('getgyms.php'); };
 	   	var raidPromise = function(){ return $.getJSON('getraids.php'); };
-	   	var pokemonPromise = function(){ return $.getJSON('getpokemon.php'); };
 	   	var questsPromise = function(){ return $.getJSON('getquest.php'); };
 	   	
 	   	if(settings.layers.some(layer => { return layer.includes('gym'); } )){
@@ -129,10 +128,6 @@ $(document).ready(function(){
 	   	
 	   	if(settings.layers.some(layer => { return layer.includes('raid'); })){
 	   		promises.push(raidPromise());
-	   	}
-	   	
-	   	if(settings.layers.includes('show_pokemon')){
-	   		promises.push(pokemonPromise());
 	   	}
 	   	
 	   	if(settings.layers.includes('show_quests')){
@@ -151,9 +146,6 @@ $(document).ready(function(){
 	   			raid_data = data[index++];
 	   		}
 	   		
-	   		if(settings.layers.includes('show_pokemon')){
-	   			pokemon_data = data[index++];
-	   		}
 	   		
 	   		if(settings.layers.includes('show_quests')){
 	   			quests_data = data[index++];
@@ -168,8 +160,6 @@ $(document).ready(function(){
 	   		
 	   		mapData.exgyms = settings.layers.includes('show_exgyms') ? buildGymLayerJson(filterGyms(gym_data, raid_data, true)) : null;
 	   		mapData.gyms = settings.layers.includes('show_gyms') ? buildGymLayerJson(filterGyms(gym_data, raid_data, false)) : null;
-	   		
-	   		mapData.pokemon = settings.layers.includes('show_pokemon') ? buildPokemonLayerJson(pokemon_data) : null;
 	   		
 	   		mapData.quests = settings.layers.includes('show_quests') ? buildQuestsLayerJson(quests_data) : null;
 	   		
@@ -276,42 +266,6 @@ $(document).ready(function(){
 		});
     };
     
-    var buildPokemonLayerJson = function(pokemons){
-		return pokemons
-            .map(pokemon => {
-                var timeParts = pokemon.tth.split(':');
-                var tthParts = [];
-                var hasHours = false;
-                
-                if(timeParts[0] > 0){
-                    hasHours = true;
-                    tthParts.push(timeParts[0] + ' Stunde' + (timeParts[0] != 1 ? 'n' : ''));
-                }
-                
-                if(timeParts[1] > 0 || hasHours){
-                    tthParts.push(timeParts[1] + ' Minute' + (timeParts[1] != 1 ? 'n' : ''))
-                }
-                
-                tthParts.push(timeParts[2] + ' Sekunde' + (timeParts[2] != 1 ? 'n' : ''))
-                pokemon.tth_string = 'Noch ' + tthParts.join(', ');
-                return pokemon;
-            })
-            .map(pokemon => { 
-    			return {
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Point',
-                        'coordinates': [pokemon.lon, pokemon.lat]
-                    },
-                    'properties': {
-                        'title': pokemon.pokemon_name,
-                        'description': renderTemplate(pokemonPopupHtml, pokemon),
-                        'icon': loadPokemonIcon(pokemon.pokemon_id)
-                    }
-      			}
-    		});
-    };
-    
     var buildQuestsLayerJson = function(quests){
     	return quests
 	        .map(quest => prepareQuestForRendering(quest))
@@ -335,17 +289,17 @@ $(document).ready(function(){
     	switch(quest.quest_reward_type){
 			case('2'):{
 				quest.reward_amount = quest.quest_item_amount + 'x ';
-				quest.reward_image = 'buidl/quests/quest_reward_' + quest.quest_item_id + '.png';
+				quest.reward_image = 'icons/quests/quest_reward_' + quest.quest_item_id + '.png';
 				break;
 			}
 			case('3'):{
 				quest.reward_amount = quest.quest_stardust + ' '; 
-				quest.reward_image = 'buidl/quests/quest_reward_stardust.png';
+				quest.reward_image = 'icons/quests/quest_reward_stardust.png';
 				break;
 			}
 			case('7'):{
 				quest.reward_amount = '';
-				quest.reward_image = 'buidl/' + constants.map_icon_pack + '/id_' + quest.quest_pokemon_id + '.png';
+				quest.reward_image = 'icons/' + constants.map_icon_pack + '/id_' + quest.quest_pokemon_id + '.png';
 				break;
 			}    		
 		}
@@ -417,25 +371,25 @@ $(document).ready(function(){
     
     var loadTeamIcon = function(team) {
     	var name = 'gym';
-    	var url = 'buidl/gym.png';
+    	var url = 'icons/gym.png';
     	
     	switch(team){
 	    	case '1':
 	    	case 'mystic':{
 	    		name = 'mystic';
-	    		url = 'buidl/mystic.png';
+	    		url = 'icons/mystic.png';
 	    		break;
 	    	}
 	    	case '2':
 	    	case 'valor':{
 				name = 'valor';
-				url = 'buidl/valor.png';
+				url = 'icons/valor.png';
 				break;
 	    	}
 	    	case '3':
 	    	case 'instinct':{
 				name = 'instinct';
-				url = 'buidl/instinct.png';
+				url = 'icons/instinct.png';
 				break;
 	    	}
     	}
@@ -446,29 +400,29 @@ $(document).ready(function(){
     
     var loadPokemonIcon = function(pokedex_id) {    	
     	var name = 'icon_pokedex_' + pokedex_id;
-    	var url = 'buidl/' + constants.map_icon_pack + '/id_' + pokedex_id + '.png';
+    	var url = 'icons/' + constants.map_icon_pack + '/id_' + pokedex_id + '.png';
     	loadImage(name, url);    	
     	return name;
     };
     
     var loadQuestIcon = function(quest){
     	var pokestop_name = 'quest_pokestop';
-    	var pokestop_url = 'buidl/quests/pokestop.png';
+    	var pokestop_url = 'icons/quests/pokestop.png';
     	
     	switch(quest.quest_reward_type){
 			case('2'):{
 				name = 'reward_item_' + quest.quest_item_id;
-				url = 'buidl/quests/quest_reward_' + quest.quest_item_id + '.png';
+				url = 'icons/quests/quest_reward_' + quest.quest_item_id + '.png';
 				break;
 			}
 			case('3'):{
 				name = 'reward_stardust';
-				url = 'buidl/quests/quest_reward_stardust.png';
+				url = 'icons/quests/quest_reward_stardust.png';
 				break;
 			}
     		case('7'):{
     			name = 'reward_pokemon_' + quest.quest_pokemon_id;
-    			url = 'buidl/' + constants.map_icon_pack + '/id_' + quest.quest_pokemon_id + '.png';
+    			url = 'icons/' + constants.map_icon_pack + '/id_' + quest.quest_pokemon_id + '.png';
     			break;
     		}    		
     	}
