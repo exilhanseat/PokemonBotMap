@@ -277,7 +277,7 @@ $(document).ready(function(){
 	                    'coordinates': [quest.lon, quest.lat]
 	                },
 	                'properties': {
-	                    'title': quest.quest_task,
+	                    'title': quest.quest_info,
 	                    'description': renderTemplate(questPopupHtml, quest),
 	                    'icon': quest.icon
 	                }
