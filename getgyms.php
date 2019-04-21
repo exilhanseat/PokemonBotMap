@@ -24,7 +24,7 @@ try {
                 gyms,
                 mapadroid.gym_team AS team
             WHERE
-                gyms.gym_name = team.name";
+                gyms.external_id = team.external_id";
     $result = $dbh->query($sql);
 
     while ($gym = $result->fetch(PDO::FETCH_ASSOC)) {
